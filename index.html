@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather API</title>
+  <script defer src="https://use.fontawesome.com/releases/v5.15.2/js/all.js" integrity="sha384-vuFJ2JiSdUpXLKGK+tDteQZBqNlMwAjhZ3TvPaDfN9QmbPb7Q8qUpbSNapQev3YF" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="weather">
+    <div class="currIcon">
+
+    </div>
+    <div class="currTemp"></div>
+    <div class="city"></div>
+  </div>
+
+</body>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const city = document.querySelector(".city");
+    const currTemp = document.querySelector(".currTemp");
+    const icon = document.querySelector(".currIcon");
+
+    const apiURL = "https://api.openweathermap.org/data/2.5/weather?id=1835553&appid=60a124321557bb4162f09483148a6562&units=metric";
+
+    fetch(apiURL)
+      .then(response => {
+        if(!response.ok) {
+          throw new Error("response not");
+        }
+        return response.json();
+      })
+      .then(data => {
+        const iconCode = data.weather[0].icon;
+        const temp = Math.floor(data.main.temp) + "˚";
+        const cityName = data.name;
+        icon.innerHTML = `<img src="https://openweathermap.org/img/wn/${iconCode}@2x.png" alt="${data.weather[0].description}"/>`;
+        currTemp.textContent = `현재 온도: ${temp}`;
+        city.textContent = `도시 이름: ${cityName}`;
+      })
+      .catch(error => console.error('Fetch error:', error));
+  });
+</script>
+</html>
